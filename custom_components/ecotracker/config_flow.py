@@ -8,7 +8,6 @@ from typing import Any
 import aiohttp
 import async_timeout
 import voluptuous as vol
-from sensor import API_RESPONSE_JSON_KEYS, API_ENDPOINT
 
 from homeassistant import config_entries
 from homeassistant.const import CONF_IP_ADDRESS
@@ -22,6 +21,16 @@ _LOGGER = logging.getLogger(__name__)
 DOMAIN = "ecotracker"
 CONF_SCAN_INTERVAL = "scan_interval"
 DEFAULT_SCAN_INTERVAL = 60
+API_ENDPOINT = "/v1/json"
+API_RESPONSE_JSON_KEYS = [
+    "power",
+    "powerPhase1",
+    "powerPhase2",
+    "powerPhase3",
+    "powerAvg",
+    "energyCounterIn",
+    "energyCounterOut",
+]
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
@@ -79,7 +88,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 errors["base"] = "cannot_connect"
             except InvalidData:
                 errors["base"] = "invalid_data"
-            except Exception:  # pylint: disable=broad-except
+            except Exception:
                 _LOGGER.exception("Unexpected exception")
                 errors["base"] = "unknown"
             else:

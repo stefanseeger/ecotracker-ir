@@ -144,7 +144,7 @@ class EcotrackerPowerSensor(EcotrackerSensorBase):
     def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
-        self._attr_name = "Power"
+        self._attr_translation_key = "power"
         self._attr_unique_id = f"{entry.entry_id}_power"
         self._attr_device_class = SensorDeviceClass.POWER
         self._attr_state_class = SensorStateClass.MEASUREMENT
@@ -162,7 +162,7 @@ class EcotrackerPowerPhase1Sensor(EcotrackerSensorBase):
     def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
-        self._attr_name = "Power Phase 1"
+        self._attr_translation_key = "power_phase_1"
         self._attr_unique_id = f"{entry.entry_id}_power_phase1"
         self._attr_device_class = SensorDeviceClass.POWER
         self._attr_state_class = SensorStateClass.MEASUREMENT
@@ -180,7 +180,7 @@ class EcotrackerPowerPhase2Sensor(EcotrackerSensorBase):
     def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
-        self._attr_name = "Power Phase 2"
+        self._attr_translation_key = "power_phase_2"
         self._attr_unique_id = f"{entry.entry_id}_power_phase2"
         self._attr_device_class = SensorDeviceClass.POWER
         self._attr_state_class = SensorStateClass.MEASUREMENT
@@ -198,7 +198,7 @@ class EcotrackerPowerPhase3Sensor(EcotrackerSensorBase):
     def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
-        self._attr_name = "Power Phase 3"
+        self._attr_translation_key = "power_phase_3"
         self._attr_unique_id = f"{entry.entry_id}_power_phase3"
         self._attr_device_class = SensorDeviceClass.POWER
         self._attr_state_class = SensorStateClass.MEASUREMENT
@@ -216,7 +216,7 @@ class EcotrackerPowerAvgSensor(EcotrackerSensorBase):
     def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
-        self._attr_name = "Power Average"
+        self._attr_translation_key = "power_avg"
         self._attr_unique_id = f"{entry.entry_id}_power_avg"
         self._attr_device_class = SensorDeviceClass.POWER
         self._attr_state_class = SensorStateClass.MEASUREMENT
@@ -234,7 +234,7 @@ class EcotrackerEnergyInSensor(EcotrackerSensorBase):
     def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
-        self._attr_name = "Energy In"
+        self._attr_translation_key = "energy_in"
         self._attr_unique_id = f"{entry.entry_id}_energy_in"
         self._attr_device_class = SensorDeviceClass.ENERGY
         self._attr_state_class = SensorStateClass.TOTAL_INCREASING
@@ -252,7 +252,7 @@ class EcotrackerEnergyOutSensor(EcotrackerSensorBase):
     def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
-        self._attr_name = "Energy Out"
+        self._attr_translation_key = "energy_out"
         self._attr_unique_id = f"{entry.entry_id}_energy_out"
         self._attr_device_class = SensorDeviceClass.ENERGY
         self._attr_state_class = SensorStateClass.TOTAL_INCREASING
