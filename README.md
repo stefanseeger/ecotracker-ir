@@ -1,12 +1,12 @@
-# Ecotracker IR Home Assistant Integration
+# Ecotracker Home Assistant Integration
 
 Give me a tip: [paypal.me/StefanSeeger](https://www.paypal.com/paypalme/StefanSeeger)
 
-Custom integration for Ecotracker IR energy monitoring device. It directly accessed the local HTTP server.
+Custom integration for Ecotracker energy monitoring device. It directly accessed the local HTTP server.
 
 ## Prerequisite
 
-Ecotracker IR must have the local HTTP server activated
+Ecotracker must have the local HTTP server activated
 
 ## Installation
 
