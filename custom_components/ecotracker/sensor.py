@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
+from datetime import timedelta, date, datetime
 import logging
 
 import aiohttp
@@ -72,6 +72,12 @@ async def async_setup_entry(
         EcotrackerPowerAvgSensor(coordinator, entry),
         EcotrackerEnergyInSensor(coordinator, entry),
         EcotrackerEnergyOutSensor(coordinator, entry),
+        EcotrackerDailyEnergyInSensor(coordinator, entry),
+        EcotrackerDailyEnergyOutSensor(coordinator, entry),
+        EcotrackerMonthlyEnergyInSensor(coordinator, entry),
+        EcotrackerMonthlyEnergyOutSensor(coordinator, entry),
+        EcotrackerYearlyEnergyInSensor(coordinator, entry),
+        EcotrackerYearlyEnergyOutSensor(coordinator, entry),
     ]
 
     async_add_entities(entities)
@@ -262,3 +268,241 @@ class EcotrackerEnergyOutSensor(EcotrackerSensorBase):
     def native_value(self):
         """Return the state of the sensor."""
         return self.coordinator.data.get("energyCounterOut")
+
+
+class EcotrackerDailyEnergyInSensor(EcotrackerSensorBase):
+    """Representation of Ecotracker Daily Energy In Sensor."""
+
+    def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
+        """Initialize the sensor."""
+        super().__init__(coordinator, entry)
+        self._attr_translation_key = "daily_energy_in"
+        self._attr_unique_id = f"{entry.entry_id}_daily_energy_in"
+        self._attr_device_class = SensorDeviceClass.ENERGY
+        self._attr_state_class = SensorStateClass.TOTAL
+        self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
+        self._last_reset = date.today()
+        self._last_energy_in = None
+
+    @property
+    def native_value(self):
+        """Return the state of the sensor."""
+        current_energy_in = self.coordinator.data.get("energyCounterIn")
+
+        # Reset if we've moved to a new day
+        if date.today() != self._last_reset:
+            self._last_reset = date.today()
+            self._last_energy_in = current_energy_in
+            return 0
+
+        # First time initialization
+        if self._last_energy_in is None:
+            self._last_energy_in = current_energy_in
+            return 0
+
+        # Calculate the difference
+        if current_energy_in is not None and self._last_energy_in is not None:
+            daily_energy = current_energy_in - self._last_energy_in
+            # Ensure we don't return negative values
+            return max(0, daily_energy)
+
+        return 0
+
+
+class EcotrackerDailyEnergyOutSensor(EcotrackerSensorBase):
+    """Representation of Ecotracker Daily Energy Out Sensor."""
+
+    def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
+        """Initialize the sensor."""
+        super().__init__(coordinator, entry)
+        self._attr_translation_key = "daily_energy_out"
+        self._attr_unique_id = f"{entry.entry_id}_daily_energy_out"
+        self._attr_device_class = SensorDeviceClass.ENERGY
+        self._attr_state_class = SensorStateClass.TOTAL
+        self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
+        self._last_reset = date.today()
+        self._last_energy_out = None
+
+    @property
+    def native_value(self):
+        """Return the state of the sensor."""
+        current_energy_out = self.coordinator.data.get("energyCounterOut")
+
+        # Reset if we've moved to a new day
+        if date.today() != self._last_reset:
+            self._last_reset = date.today()
+            self._last_energy_out = current_energy_out
+            return 0
+
+        # First time initialization
+        if self._last_energy_out is None:
+            self._last_energy_out = current_energy_out
+            return 0
+
+        # Calculate the difference
+        if current_energy_out is not None and self._last_energy_out is not None:
+            daily_energy = current_energy_out - self._last_energy_out
+            # Ensure we don't return negative values
+            return max(0, daily_energy)
+
+        return 0
+
+
+class EcotrackerMonthlyEnergyInSensor(EcotrackerSensorBase):
+    """Representation of Ecotracker Monthly Energy In Sensor."""
+
+    def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
+        """Initialize the sensor."""
+        super().__init__(coordinator, entry)
+        self._attr_translation_key = "monthly_energy_in"
+        self._attr_unique_id = f"{entry.entry_id}_monthly_energy_in"
+        self._attr_device_class = SensorDeviceClass.ENERGY
+        self._attr_state_class = SensorStateClass.TOTAL
+        self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
+        self._last_reset = (date.today().year, date.today().month)
+        self._last_energy_in = None
+
+    @property
+    def native_value(self):
+        """Return the state of the sensor."""
+        current_energy_in = self.coordinator.data.get("energyCounterIn")
+        current_month = (date.today().year, date.today().month)
+
+        # Reset if we've moved to a new month
+        if current_month != self._last_reset:
+            self._last_reset = current_month
+            self._last_energy_in = current_energy_in
+            return 0
+
+        # First time initialization
+        if self._last_energy_in is None:
+            self._last_energy_in = current_energy_in
+            return 0
+
+        # Calculate the difference
+        if current_energy_in is not None and self._last_energy_in is not None:
+            monthly_energy = current_energy_in - self._last_energy_in
+            # Ensure we don't return negative values
+            return max(0, monthly_energy)
+
+        return 0
+
+
+class EcotrackerMonthlyEnergyOutSensor(EcotrackerSensorBase):
+    """Representation of Ecotracker Monthly Energy Out Sensor."""
+
+    def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
+        """Initialize the sensor."""
+        super().__init__(coordinator, entry)
+        self._attr_translation_key = "monthly_energy_out"
+        self._attr_unique_id = f"{entry.entry_id}_monthly_energy_out"
+        self._attr_device_class = SensorDeviceClass.ENERGY
+        self._attr_state_class = SensorStateClass.TOTAL
+        self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
+        self._last_reset = (date.today().year, date.today().month)
+        self._last_energy_out = None
+
+    @property
+    def native_value(self):
+        """Return the state of the sensor."""
+        current_energy_out = self.coordinator.data.get("energyCounterOut")
+        current_month = (date.today().year, date.today().month)
+
+        # Reset if we've moved to a new month
+        if current_month != self._last_reset:
+            self._last_reset = current_month
+            self._last_energy_out = current_energy_out
+            return 0
+
+        # First time initialization
+        if self._last_energy_out is None:
+            self._last_energy_out = current_energy_out
+            return 0
+
+        # Calculate the difference
+        if current_energy_out is not None and self._last_energy_out is not None:
+            monthly_energy = current_energy_out - self._last_energy_out
+            # Ensure we don't return negative values
+            return max(0, monthly_energy)
+
+        return 0
+
+
+class EcotrackerYearlyEnergyInSensor(EcotrackerSensorBase):
+    """Representation of Ecotracker Yearly Energy In Sensor."""
+
+    def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
+        """Initialize the sensor."""
+        super().__init__(coordinator, entry)
+        self._attr_translation_key = "yearly_energy_in"
+        self._attr_unique_id = f"{entry.entry_id}_yearly_energy_in"
+        self._attr_device_class = SensorDeviceClass.ENERGY
+        self._attr_state_class = SensorStateClass.TOTAL
+        self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
+        self._last_reset = date.today().year
+        self._last_energy_in = None
+
+    @property
+    def native_value(self):
+        """Return the state of the sensor."""
+        current_energy_in = self.coordinator.data.get("energyCounterIn")
+        current_year = date.today().year
+
+        # Reset if we've moved to a new year
+        if current_year != self._last_reset:
+            self._last_reset = current_year
+            self._last_energy_in = current_energy_in
+            return 0
+
+        # First time initialization
+        if self._last_energy_in is None:
+            self._last_energy_in = current_energy_in
+            return 0
+
+        # Calculate the difference
+        if current_energy_in is not None and self._last_energy_in is not None:
+            yearly_energy = current_energy_in - self._last_energy_in
+            # Ensure we don't return negative values
+            return max(0, yearly_energy)
+
+        return 0
+
+
+class EcotrackerYearlyEnergyOutSensor(EcotrackerSensorBase):
+    """Representation of Ecotracker Yearly Energy Out Sensor."""
+
+    def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
+        """Initialize the sensor."""
+        super().__init__(coordinator, entry)
+        self._attr_translation_key = "yearly_energy_out"
+        self._attr_unique_id = f"{entry.entry_id}_yearly_energy_out"
+        self._attr_device_class = SensorDeviceClass.ENERGY
+        self._attr_state_class = SensorStateClass.TOTAL
+        self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
+        self._last_reset = date.today().year
+        self._last_energy_out = None
+
+    @property
+    def native_value(self):
+        """Return the state of the sensor."""
+        current_energy_out = self.coordinator.data.get("energyCounterOut")
+        current_year = date.today().year
+
+        # Reset if we've moved to a new year
+        if current_year != self._last_reset:
+            self._last_reset = current_year
+            self._last_energy_out = current_energy_out
+            return 0
+
+        # First time initialization
+        if self._last_energy_out is None:
+            self._last_energy_out = current_energy_out
+            return 0
+
+        # Calculate the difference
+        if current_energy_out is not None and self._last_energy_out is not None:
+            yearly_energy = current_energy_out - self._last_energy_out
+            # Ensure we don't return negative values
+            return max(0, yearly_energy)
+
+        return 0
