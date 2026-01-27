@@ -25,7 +25,7 @@
   "options": {
     "step": {
       "init": {
-        "title": "Ecotracker Options",
+        "title": "Ecotracker options",
         "description": "Configure Ecotracker settings",
         "data": {
           "scan_interval": "Polling Interval (seconds)"
@@ -51,7 +51,7 @@
         "name": "Power phase 3"
       },
       "power_avg": {
-        "name": "Power average"
+        "name": "Power average (last 60 seconds)"
       },
       "energy_in": {
         "name": "Total grid import"

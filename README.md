@@ -2,7 +2,11 @@
 
 Give me a tip: [paypal.me/StefanSeeger](https://www.paypal.com/paypalme/StefanSeeger)
 
-Custom integration for Ecotracker energy monitoring device.
+Custom integration for Ecotracker energy monitoring device. It directly accessed the local HTTP server.
+
+## Prerequisite
+
+Ecotracker must have the local HTTP server activated
 
 ## Installation
 
@@ -32,6 +36,7 @@ Custom integration for Ecotracker energy monitoring device.
 ### Changing Settings
 
 To change the polling interval after setup:
+
 1. Go to Settings > Devices & Services
 2. Find your Ecotracker device
 3. Click "Configure"
@@ -40,12 +45,12 @@ To change the polling interval after setup:
 ## Features
 
 - Configurable polling interval (1-86400 seconds, default: 60 seconds)
-- Three sensors:
+- Multiple sensors:
   - Power (W)
-  - Power Average
-  - Power Phase 1
-  - Power Phase 2
-  - Power Phase 3
+  - Power average (last 60 seconds)
+  - Power phase 1
+  - Power phase 2
+  - Power phase 3
   - Energy In (kWh)
   - Energy Out (kWh)
 - Compatible with Home Assistant Energy Dashboard
@@ -55,9 +60,9 @@ To change the polling interval after setup:
 ## Sensors
 
 - `sensor.ecotracker_power` - Current power consumption in Watts
-- `sensor.ecotracker_power_average` - Average power consumption in Watts
-- `sensor.ecotracker_power_phase_1` - Power consumption of phase 1
-- `sensor.ecotracker_power_phase_2` - Power consumption of phase 2
-- `sensor.ecotracker_power_phase_3` - Power consumption of phase 3
-- `sensor.ecotracker_energy_in` - Total energy imported in kWh
-- `sensor.ecotracker_energy_out` - Total energy exported in kWh
+- `sensor.ecotracker_power_phase_1` - Power consumption of phase 1 in Watts
+- `sensor.ecotracker_power_phase_2` - Power consumption of phase 2 in Watts
+- `sensor.ecotracker_power_phase_3` - Power consumption of phase 3 in Watts
+- `sensor.ecotracker_power_average` - Average power consumption (last 60 seconds)
+- `sensor.ecotracker_energy_in` - Total energy imported in Watt-hours
+- `sensor.ecotracker_energy_out` - Total energy exported in Watt-hours
